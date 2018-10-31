@@ -8,18 +8,34 @@ int startGame(sf::RenderWindow& window,sf::Vector2i& pozycja,sf::Sprite& space,s
     {
         sf::Event e;
         pozycja = sf::Mouse::getPosition(window);
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
         while (window.pollEvent(e))
         {
             if (e.type == sf::Event::Closed)
                 window.close();
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+
+            if(st.getGlobalBounds().contains(window.mapPixelToCoords(mousePos)))
             {
-                if(pozycja.x>=510&&pozycja.x<=910&&pozycja.y>=150&&pozycja.y<=350)
-                    return 1;//po klikniêciu start program zwraca 1 co rozpoczyna grê
-                if(pozycja.x>=280&&pozycja.x<=1130&&pozycja.y>=500&&pozycja.y<=700)
+                st.setColor(sf::Color(255, 255,255 , 180));
+                if (e.type == sf::Event::MouseButtonPressed)
+                    {
+                        if (e.mouseButton.button == sf::Mouse::Left)
+                        {
+                            return 1;
+                        }
+                    }
+            }
+            else st.setColor(sf::Color(255, 255,255 , 128));
+            if(kc.getGlobalBounds().contains(window.mapPixelToCoords(mousePos)))
+            {
+               kc.setColor(sf::Color(255, 255,255 , 180));
+               /* if(pozycja.x>=510&&pozycja.x<=910&&pozycja.y>=150&&pozycja.y<=350)
+                    return 1;//po klikniêciu start program zwraca 1 co rozpoczyna grê*/
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
                     return 0; // po klikniêciu wyjdŸ z gry program zwraca 0 co koñczy pracê programu
             }
+            else kc.setColor(sf::Color(255, 255,255 , 128));
         }
 
         window.draw(space);
@@ -29,25 +45,87 @@ int startGame(sf::RenderWindow& window,sf::Vector2i& pozycja,sf::Sprite& space,s
     }
     return 0;
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int chooseLevel(sf::RenderWindow& window,sf::Sprite& space,sf::Sprite num[],sf::Sprite& samouczek)
+{
+    while(window.isOpen())
+    {
+        sf::Event e;
+       // pozycja = sf::Mouse::getPosition(window);
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+        while (window.pollEvent(e))
+        {
+            if (e.type == sf::Event::Closed)
+                window.close();
+
+            for(int i=0;i<4;i++)
+            {
+                if (num[i].getGlobalBounds().contains(window.mapPixelToCoords(mousePos)))
+                {
+                    num[i].setColor(sf::Color(255, 255,255 , 180));
+                    if (e.type == sf::Event::MouseButtonPressed)
+                    {
+                        if (e.mouseButton.button == sf::Mouse::Left)
+                        {
+                            return i+1;
+                        }
+                    }
+
+                }
+                else num[i].setColor(sf::Color(255, 255,255 , 128));
+            }
+            if(samouczek.getGlobalBounds().contains(window.mapPixelToCoords(mousePos)))
+            {
+                samouczek.setColor(sf::Color(255, 255,255 , 180));
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                return 0;
+            }
+            else samouczek.setColor(sf::Color(255, 255,255 , 128));
+        }
+
+        window.clear();
+
+        window.draw(space);
+        window.draw(samouczek);
+        window.draw(num[0]);
+        window.draw(num[1]);
+        window.draw(num[2]);
+        //window.draw(num[3]);
+        window.display();
+    }
+    return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //argumenty funkcji: okno, pozycja myszki, t³o, napis wznów grê i napis wyjdŸ z gry
 int pauzeGame(sf::RenderWindow& window,sf::Vector2i& pozycja,sf::Sprite& space,sf::Sprite&cont, sf::Sprite&kc)
 {
     while(window.isOpen())
     {
         sf::Event e;
-        pozycja = sf::Mouse::getPosition(window);
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
         while (window.pollEvent(e))
         {
             if (e.type == sf::Event::Closed)
                 window.close();
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            if(cont.getGlobalBounds().contains(window.mapPixelToCoords(mousePos)))
             {
-                if(pozycja.x>=300&&pozycja.x<=1102&&pozycja.y>=170&&pozycja.y<=370)
+                cont.setColor(sf::Color(255, 255,255 , 180));
+                 if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
                     return 1;//po klikniêciu wznów grê program zwraca 1 co wznawia grê
-                if(pozycja.x>=280&&pozycja.x<=1130&&pozycja.y>=500&&pozycja.y<=700)
-                    return 0;// po klikniêciu wyjdŸ z gry program zwraca 0 co koñczy pracê programu
+
             }
+            else cont.setColor(sf::Color(255, 255,255 , 128));
+            if(kc.getGlobalBounds().contains(window.mapPixelToCoords(mousePos)))
+            {
+               kc.setColor(sf::Color(255, 255,255 , 180));
+               /* if(pozycja.x>=510&&pozycja.x<=910&&pozycja.y>=150&&pozycja.y<=350)
+                    return 1;//po klikniêciu start program zwraca 1 co rozpoczyna grê*/
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                    return 0; // po klikniêciu wyjdŸ z gry program zwraca 0 co koñczy pracê programu
+            }
+            else kc.setColor(sf::Color(255, 255,255 , 128));
         }
 
         window.draw(space);
@@ -64,18 +142,21 @@ int winOrLoseGame(sf::RenderWindow& window,sf::Vector2i& pozycja,sf::Sprite& spa
     while(window.isOpen())
     {
         sf::Event e;
-        pozycja = sf::Mouse::getPosition(window);
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
         while (window.pollEvent(e))
         {
             if (e.type == sf::Event::Closed)
                 window.close();
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+
+            if(wl.getGlobalBounds().contains(window.mapPixelToCoords(mousePos)))
             {
-                if(pozycja.x>=320&&pozycja.x<=1120&&pozycja.y>=200&&pozycja.y<=400)
-                  return 1;// po klikniêciu w napis zwraca 1 co powoduje
-                  //rozpoczêcie pracy programu od nowa
+                wl.setColor(sf::Color(255, 255,255 , 180));
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                return 1;
+
             }
+            else wl.setColor(sf::Color(255, 255,255 , 128));
         }
 
 
@@ -95,17 +176,17 @@ int& licz2,int& licz3,int& experience,bool& m_b,int& stage,sf::Sound& sound,sf::
             if((*itr)->poza_mapa())
             {
                 enemys.erase(itr);
-                break;
+                return 2;
             }
             else if(!(*itr)->Visible&&(((*itr)->Type==1)||(*itr)->Type==2||(*itr)->Type==4))
             {
                 enemys.erase(itr);
-                break;
+                return 2;
             }
             else if(((*itr)->Type==3||(*itr)->Type==5||(*itr)->Type==6)&&!(*itr)->Visible&&(*itr)->bron.empty())
             {
                 enemys.erase(itr);
-                break;
+                return 2;
             }
 
             if((*itr)->pozycja_wroga.intersects(s.pozycja_statku)&&(*itr)->Visible)
@@ -189,7 +270,7 @@ int& licz2,int& licz3,int& experience,bool& m_b,int& stage,sf::Sound& sound,sf::
                 if((*iter)->poza_mapa()||!(*iter)->Visible)
                 {
                     s.bron.erase(iter);
-                    break;
+                    return 2;
                 }
                 else if((*iter)->pozycja_broni.intersects((*itr)->pozycja_wroga)&&(*itr)->Visible&&(*iter)->Visible)
                 {
@@ -230,6 +311,7 @@ int& licz2,int& licz3,int& experience,bool& m_b,int& stage,sf::Sound& sound,sf::
                 }
             }
         }
+        return 2;
 }
 void upgrade(SpaceShip& s,std::vector<std::unique_ptr<Upgrades>>&upgrades)
 {
@@ -267,3 +349,5 @@ void upgrade(SpaceShip& s,std::vector<std::unique_ptr<Upgrades>>&upgrades)
             }
         }
 }
+
+

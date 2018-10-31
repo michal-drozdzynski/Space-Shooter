@@ -6,12 +6,11 @@
 
 
 
-int first_mission(sf::RenderWindow& window)
+int first_mission(sf::RenderWindow& window,sf::Sprite&kc)
 {
     if(window.getSize().x!=1440) return 1;
 
-    window.setVerticalSyncEnabled(true);
-    window.setFramerateLimit(60);
+
     sf::Vector2i pozycja = sf::Mouse::getPosition(window);
 
     //////tło//////////
@@ -25,14 +24,15 @@ int first_mission(sf::RenderWindow& window)
     contin.loadFromFile("img/kontynuuj.png");
     sf::Sprite cont;
     cont.setTexture(contin);
-    cont.setPosition(300,170);
+    cont.setPosition(20,170);
+    cont.setColor(sf::Color(255, 255,255 , 128));
 
     /////////napis start i wyjdź z gry////////
     sf::Texture start, k;
     k.loadFromFile("img/koniec.png");
-    sf::Sprite kc;
-    kc.setTexture(k);
-    kc.setPosition(280,500);
+    //sf::Sprite kc;
+   /* kc.setTexture(k);
+    kc.setPosition(280,500);*/
 
 
 
@@ -58,14 +58,16 @@ int first_mission(sf::RenderWindow& window)
     w.loadFromFile("img/win.png");
     sf::Sprite win;
     win.setTexture(w);
-    win.setPosition(320,200);
+    win.setPosition(20,200);
+    win.setColor(sf::Color(255, 255,255 , 128));
 
     ///////////napis przegrałeś/////////
     sf::Texture l;
     l.loadFromFile("img/lose.png");
     sf::Sprite lose;
     lose.setTexture(l);
-    lose.setPosition(320,200);
+    lose.setPosition(20,200);
+    lose.setColor(sf::Color(255, 255,255 , 128));
 
     //////////tekstura ulepszeń////////
     sf::Texture upg;
@@ -82,13 +84,13 @@ int first_mission(sf::RenderWindow& window)
     sf::Sound sound,sound2;
     sound.setBuffer(bum);
     sound2.setBuffer(shot);
-    sound2.setVolume(0);//3
-    sound.setVolume(0);//10
+    sound2.setVolume(3);//3
+    sound.setVolume(10);//10
 
     /////////muzyka w tle//////////////////////
     sf::Music music;
     if(!music.openFromFile("audio/1.ogg")) return 0;
-    music.setVolume(0);
+    music.setVolume(50);
     music.setLoop(true);
     music.play();
     /////////////////////////////////////
@@ -533,6 +535,7 @@ int first_mission(sf::RenderWindow& window)
 
         window.clear();
         window.draw(space);
+
         for(std::vector<std::unique_ptr<Enemys>>::iterator itr = enemys.begin(), koniec = enemys.end(); itr != koniec; ++itr)
         {
             for(std::vector<std::unique_ptr<Enemys>>::iterator i = enemys.begin(),k = enemys.end(); i != k; ++i)
@@ -546,6 +549,7 @@ int first_mission(sf::RenderWindow& window)
             (*itr)->draw(window);
             (*itr)->move(s.x,stage);
         }
+
         for(std::vector<std::unique_ptr<Upgrades>>::iterator itr = upgrades.begin(), koniec = upgrades.end(); itr != koniec; ++itr)
         {
             (*itr)->draw(window);
